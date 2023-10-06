@@ -57,6 +57,7 @@ public class verifica {
     }
     private int con =0;
     private int p=0;
+    String lex="";
     private final String source;//Variable tipo string constante y privada para la cadena a recolectar
     private final List<Token> tokens= new ArrayList<>();
     public verifica(String source){//constructor de la variable para recuperar la informacion y agregar un valor
@@ -124,6 +125,9 @@ public class verifica {
                                 }
                             if(c=='.'){
                                 sig++;
+                                if(sig>1){
+                                    break;
+                                }
                             }
                             lexema += c;
                             i++;
@@ -162,6 +166,7 @@ public class verifica {
                     }
                     else if(c=='"'){//caso de strings o comillas
                         estado=7;
+                        lex+=c;
                         pa=true; 
                     }
                     else if(c=='/'){//caso de comentarios de una linea 
@@ -205,7 +210,7 @@ public class verifica {
                     }
                 }
                 break;
-               case 6://caso de comentarios
+                case 6://caso de comentarios
                     if(c=='/' && con==1){
                         con--;
                         lexema+=c;
@@ -259,21 +264,28 @@ public class verifica {
                 case 7://caso de cadenas "hols
                     if((c==' '||parentesis(c)||puntos(c) ||operador(c)|| Character.isDigit(c)|| Character.isLetter(c))&& pa==true && (i < source.length() - 1)){
                         lexema+=c;
+                        lex+=c;
                         estado=7; 
                     }
                     else if(c=='"'&& pa==true ){
                         pa=false;
-                        Token t= new Token(TipoToken.STRING, lexema);
+                        lex+="\"";
+                        Token t= new Token(TipoToken.STRING, lex,lexema);
                          tokens.add(t);
                          lexema="";
+                         lex="";
                          estado=0;
                     }
-                    /*
+                    
                      else if ( pa == true && i == source.length() - 1) {
                         System.out.println("ERROR: Falta cerrar la cadena");
-                    }*/
-                    else{
-                        System.out.println("ERROR AL CERRAR CADENA");
+                    }
+                    else if(c=='\n' && pa == true){
+                        System.out.println("ERROR: Falta cerrar la cadena");
+                        pa=false;
+                         lexema="";
+                         lex="";
+                         estado=0;
                     }
                     break;
                 case 8://caso de operadores
