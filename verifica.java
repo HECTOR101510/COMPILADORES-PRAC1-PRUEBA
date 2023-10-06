@@ -205,7 +205,7 @@ public class verifica {
                     }
                 }
                 break;
-                case 6://caso de comentarios
+               case 6://caso de comentarios
                     if(c=='/' && con==1){
                         con--;
                         lexema+=c;
@@ -219,7 +219,7 @@ public class verifica {
                             else
                                 break;
                         }
-                        Token t= new Token(TipoToken.COMENT, null);
+                        Token t= new Token(TipoToken.COMENT, lexema);
                          tokens.add(t);
                          lexema="";
                          estado=0;
@@ -229,18 +229,18 @@ public class verifica {
                         lexema+=c;
                         i++;
                         c=source.charAt(i);
-                        while(Character.isDigit(c) || Character.isLetter(c) || c==' ' || !Character.isWhitespace(c)){
-                            
+                        while(Character.isDigit(c) || Character.isLetter(c) || c==' ' || !Character.isWhitespace(c) || c=='\n'){
                             lexema+=c;///*hjs
                             i++;
                             if(i<source.length()){
                             c=source.charAt(i);
-                            }
+                            
                             if(c=='/' && a==true){
-                                Token t= new Token(TipoToken.COMENT, null);
+                                lexema+=c;
+                                Token t= new Token(TipoToken.COMENT, lexema);
                                 tokens.add(t);
-                                lexema="";
                                 estado=0;
+                                lexema="";
                                 con--;
                                 break;
                             }
@@ -249,6 +249,7 @@ public class verifica {
                             }else{
                                 a=false;
                             }
+                        }
                         } 
                     }
                     else{
