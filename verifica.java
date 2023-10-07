@@ -338,7 +338,7 @@ public class verifica {
                         i--;
                     }
                     break;
-                case 9:
+               case 9:
                     if(Character.isLetter(c) || Character.isDigit(c)){
                         estado=9;
                         lexema+=c;
