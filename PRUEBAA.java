@@ -1,3 +1,5 @@
+//el codigo se realizo en gran parte antes de subirlo y no se notaran todas las actualizaciones de igual manera en el git
+//pero ambos contribuimos en la creacion de los casos para cada las verificaciones del proyecto.
 package pruebaa;
 
 import java.io.BufferedReader;
