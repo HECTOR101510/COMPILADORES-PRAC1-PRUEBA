@@ -55,6 +55,8 @@ public class verifica {
         String punto=",.;";
         return punto.indexOf(c)!=-1;
     }
+    
+    
     private int con =0;
     private int p=0;
     String lex="";
@@ -108,11 +110,11 @@ public class verifica {
                         lexema+=c; 
                     }
                     else if(Character.isDigit(c)){//12e+9 lexema=12e++
-                        boolean digito=false,pun=false;
+                        boolean digito=false,pun=false,pe=false;
                         int sig=0;
                         while(Character.isDigit(c) || c=='.' || c=='E' || c=='e' || c=='-' || c=='+'){
                             if(c=='+' || c=='-'){
-                                    if(((source.charAt(lexema.length()-1)=='e' || source.charAt(lexema.length()-1)=='E') && (c=='+' || c=='-') && pun==false)){
+                                    if(((lexema.charAt(lexema.length()-1)=='e' || lexema.charAt(lexema.length()-1)=='E') && (c=='+' || c=='-') && pun==false)){
                                     lexema+=c;
                                     i++;
                                     c = source.charAt(i);
@@ -128,6 +130,9 @@ public class verifica {
                                 if(sig>1){
                                     break;
                                 }
+                            }
+                            if(c=='e'||c=='E'){
+                                pe=true;
                             }
                             lexema += c;
                             i++;
@@ -157,11 +162,20 @@ public class verifica {
                             break;
                         }
                         else{
-                            Token t= new Token(TipoToken.NUMBER, lexema,lexema);
+                            if(pe==true || sig!=0||pun==true){
+                                double m=Double.parseDouble(lexema);
+                                Token t= new Token(TipoToken.NUMBER, lexema,m);
+                                tokens.add(t); 
+                            }
+                            else{
+                                Token t= new Token(TipoToken.NUMBER, lexema,lexema);
+                                tokens.add(t);
+                            }
+                             
                             estado=0;
                             lexema="";
                             i--;
-                            tokens.add(t);  
+                             
                         }
                     }
                     else if(c=='"'){//caso de strings o comillas
@@ -224,8 +238,6 @@ public class verifica {
                             else
                                 break;
                         }
-                        Token t= new Token(TipoToken.COMENT, lexema);
-                         tokens.add(t);
                          lexema="";
                          estado=0;
                     }
@@ -242,8 +254,6 @@ public class verifica {
                             
                             if(c=='/' && a==true){
                                 lexema+=c;
-                                Token t= new Token(TipoToken.COMENT, lexema);
-                                tokens.add(t);
                                 estado=0;
                                 lexema="";
                                 con--;
@@ -261,7 +271,7 @@ public class verifica {
                         System.out.println("ERROR EN COMENTARIOS: "+c);
                     }
                     break;
-                case 7://caso de cadenas "hols
+                case 7://caso de cadenas 
                     if((c==' '||parentesis(c)||puntos(c) ||operador(c)|| Character.isDigit(c)|| Character.isLetter(c))&& pa==true && (i < source.length() - 1)){
                         lexema+=c;
                         lex+=c;
@@ -338,7 +348,7 @@ public class verifica {
                         i--;
                     }
                     break;
-               case 9:
+                case 9:
                     if(Character.isLetter(c) || Character.isDigit(c)){
                         estado=9;
                         lexema+=c;

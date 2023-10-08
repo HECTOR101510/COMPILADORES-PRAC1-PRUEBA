@@ -17,7 +17,5 @@ public enum TipoToken{//enum es un enumeracion de valores constantes
     AND, ELSE, FALSE, FUN, FOR, IF, NULL, OR,
     PRINT, RETURN, TRUE, VAR, WHILE,
     
-    COMENT,
-
     EOF
 }
